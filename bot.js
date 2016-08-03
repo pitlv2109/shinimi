@@ -33,7 +33,7 @@ const firstEntityValue = (entities, entity) => {
 
 // Our bot actions
 const actions = {
-  say(sessionId, context, message, cb) {
+  send(sessionId, context, message, cb) {
     console.log(message);
 
     // Our bot has something to say!
