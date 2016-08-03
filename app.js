@@ -63,7 +63,7 @@ app.post('/webhook', (req, res) => {
           if (attachments) {
             // We received an attachment
             // Let's reply with an automatic message
-            fbMessage(sender, 'Sorry I can only process text messages for now.')
+            FB.fbMessage(sender, 'Sorry I can only process text messages for now.')
             .catch(console.error);
           } else if (text) {
             // We received a text message
@@ -87,7 +87,7 @@ app.post('/webhook', (req, res) => {
               // }
 
               // Updating the user's current session state
-              bot.sessions[sessionId].context = bot.context;
+              bot.sessions[sessionId].context = context;
             })
             .catch((err) => {
               console.error('Oops! Got an error from Wit: ', err.stack || err);
