@@ -104,8 +104,10 @@ const getWit = () => {
 	});
 }
 
-exports.getWit = getWit;
-
-
+module.exports = {
+	getWit: getWit,
+	findOrCreateSession: findOrCreateSession,
+	sessions: sessions	
+};
 
 
