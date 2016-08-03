@@ -11,7 +11,11 @@ const Config = require('./const.js');
 const FB = require('./facebook.js');
 
 // Setting up our bot
-const wit = bot.getWit();
+const wit = new Wit({
+  accessToken: Config.WIT_TOKEN,
+  actions,
+  logger: new log.Logger(log.INFO)
+});
 
 // This will contain all user sessions.
 // Each session has an entry:
