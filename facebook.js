@@ -54,6 +54,6 @@ function verifyRequestSignature(req, res, buf) {
 
 module.exports = {
 	fbMessage: fbMessage,
-	verifyRequestSignature: verifyRequestSignature;
+	verifyRequestSignature: verifyRequestSignature
 };
 
