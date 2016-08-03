@@ -104,7 +104,10 @@ const getWit = () => {
   });
 };
 
-exports.getWit = getWit;
+module.exports = {
+	getWit: getWit,
+	findOrCreateSession: findOrCreateSession
+};
 
 // bot testing mode
 // http://stackoverflow.com/questions/6398196
