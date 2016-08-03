@@ -18,6 +18,28 @@ try {
 // ----------------------------------------------------------------------------
 // Wit.ai bot specific code
 
+// This will contain all user sessions.
+// Each session has an entry:
+// sessionId -> {fbid: facebookUserId, context: sessionState}
+const sessions = {};
+
+const findOrCreateSession = (fbid) => {
+  let sessionId;
+  // Let's see if we already have a session for the user fbid
+  Object.keys(sessions).forEach(k => {
+    if (sessions[k].fbid === fbid) {
+      // Yep, got it!
+      sessionId = k;
+    }
+  });
+  if (!sessionId) {
+    // No session found for user fbid, let's create a new one
+    sessionId = new Date().toISOString();
+    sessions[sessionId] = {fbid: fbid, context: {}};
+  }
+  return sessionId;
+};
+
 // First entity
 const firstEntityValue = (entities, entity) => {
   const val = entities && entities[entity] &&
@@ -33,33 +55,28 @@ const firstEntityValue = (entities, entity) => {
 
 // Our bot actions
 const actions = {
-  send(sessionId, context, message, cb) {
-    console.log(message);
-
+  send({sessionId}, {text}) {
     // Our bot has something to say!
-    // Let's retrieve the Facebook user whose session belongs to from context
-    // TODO: need to get Facebook user name
-    const recipientId = context._fbid_;
+    // Let's retrieve the Facebook user whose session belongs to
+    const recipientId = sessions[sessionId].fbid;
     if (recipientId) {
       // Yay, we found our recipient!
       // Let's forward our bot response to her.
-      FB.fbMessage(recipientId, message, (err, data) => {
-        if (err) {
-          console.log(
-            'Oops! An error occurred while forwarding the response to',
-            recipientId,
-            ':',
-            err
-          );
-        }
-
-        // Let's give the wheel back to our bot
-        cb();
+      // We return a promise to let our bot know when we're done sending
+      return FB.fbMessage(recipientId, text)
+      .then(() => null)
+      .catch((err) => {
+        console.error(
+          'Oops! An error occurred while forwarding the response to',
+          recipientId,
+          ':',
+          err.stack || err
+        );
       });
     } else {
-      console.log('Oops! Couldn\'t find user in context:', context);
+      console.error('Oops! Couldn\'t find user for session:', sessionId);
       // Giving the wheel back to our bot
-      cb();
+      return Promise.resolve()
     }
   },
   // You should implement your custom actions here
