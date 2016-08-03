@@ -2,7 +2,6 @@
 
 const Config = require('./const.js');
 const FB = require('./facebook.js');
-const app = require('./app.js');
 
 let Wit = null;
 let log = null;
@@ -14,6 +13,31 @@ try {
   Wit = require('node-wit').Wit;
   log = require('node-wit').log;
 }
+
+// ----------------------------------------------------------------------------
+// Wit.ai bot specific code
+
+// This will contain all user sessions.
+// Each session has an entry:
+// sessionId -> {fbid: facebookUserId, context: sessionState}
+const sessions = {};
+
+const findOrCreateSession = (fbid) => {
+  let sessionId;
+  // Let's see if we already have a session for the user fbid
+  Object.keys(sessions).forEach(k => {
+    if (sessions[k].fbid === fbid) {
+      // Yep, got it!
+      sessionId = k;
+    }
+  });
+  if (!sessionId) {
+    // No session found for user fbid, let's create a new one
+    sessionId = new Date().toISOString();
+    sessions[sessionId] = {fbid: fbid, context: {}};
+  }
+  return sessionId;
+};
 
 // First entity
 const firstEntityValue = (entities, entity) => {
@@ -34,7 +58,7 @@ const actions = {
   send({sessionId}, {text}) {
     // Our bot has something to say!
     // Let's retrieve the Facebook user whose session belongs to
-    const recipientId = app.sessions[sessionId].fbid;
+    const recipientId = sessions[sessionId].fbid;
     if (recipientId) {
       // Yay, we found our recipient!
       // Let's forward our bot response to her.
