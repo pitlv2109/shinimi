@@ -2,6 +2,7 @@
 
 const request = require('request');
 const Config = require('./const.js');
+const fetch = require('node-fetch');
 
 // ----------------------------------------------------------------------------
 // Messenger API specific code
