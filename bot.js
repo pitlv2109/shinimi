@@ -75,7 +75,11 @@ const actions = {
 };
 
 const getWit = () => {
-  return new Wit(Config.WIT_TOKEN, actions);
+  return new Wit({
+  	accessToken: WIT_TOKEN,
+  	actions,
+  	logger: new log.Logger(log.INFO)
+  });
 };
 
 exports.getWit = getWit;
