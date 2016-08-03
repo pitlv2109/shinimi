@@ -1,0 +1,27 @@
+{
+  "name": "shinimi",
+  "version": "1.0.0",
+  "description": "A messenger chat bot",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "shinimi",
+    "chatbot",
+    "bot",
+    "facebook",
+    "messenger",
+    "bot",
+    "wit.ai",
+    "ai"
+  ],
+  "author": "Phillip Quy Le",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "node-wit": "^4.0.0",
+    "request": "^2.74.0"
+  }
+}
