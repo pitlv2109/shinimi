@@ -33,28 +33,33 @@ const firstEntityValue = (entities, entity) => {
 
 // Our bot actions
 const actions = {
-  send({sessionId}, {text}) {
+  say(sessionId, context, message, cb) {
+    console.log(message);
+
     // Our bot has something to say!
-    // Let's retrieve the Facebook user whose session belongs to
-    const recipientId = sessions[sessionId].fbid;
+    // Let's retrieve the Facebook user whose session belongs to from context
+    // TODO: need to get Facebook user name
+    const recipientId = context._fbid_;
     if (recipientId) {
       // Yay, we found our recipient!
       // Let's forward our bot response to her.
-      // We return a promise to let our bot know when we're done sending
-      return FB.fbMessage(recipientId, text)
-      .then(() => null)
-      .catch((err) => {
-        console.error(
-          'Oops! An error occurred while forwarding the response to',
-          recipientId,
-          ':',
-          err.stack || err
-        );
+      FB.fbMessage(recipientId, message, (err, data) => {
+        if (err) {
+          console.log(
+            'Oops! An error occurred while forwarding the response to',
+            recipientId,
+            ':',
+            err
+          );
+        }
+
+        // Let's give the wheel back to our bot
+        cb();
       });
     } else {
-      console.error('Oops! Couldn\'t find user for session:', sessionId);
+      console.log('Oops! Couldn\'t find user in context:', context);
       // Giving the wheel back to our bot
-      return Promise.resolve()
+      cb();
     }
   },
   // You should implement your custom actions here
