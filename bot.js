@@ -3,6 +3,18 @@
 const FB = require('./facebook.js');
 const Config = require('./const.js');
 
+// Setting up our bot
+let Wit = null;
+let log = null;
+try {
+  // if running from repo
+  Wit = require('../').Wit;
+  log = require('../').log;
+} catch (e) {
+  Wit = require('node-wit').Wit;
+  log = require('node-wit').log;
+}
+
 // ----------------------------------------------------------------------------
 // Wit.ai bot specific code
 
@@ -61,6 +73,12 @@ const actions = {
   });
 },
 };
+
+const getWit = () => {
+  return new Wit(Config.WIT_TOKEN, actions);
+};
+
+exports.getWit = getWit;
 
 // bot testing mode
 // http://stackoverflow.com/questions/6398196

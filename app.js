@@ -11,22 +11,7 @@ const Config = require('./const.js');
 const FB = require('./facebook.js');
 
 // Setting up our bot
-let Wit = null;
-let log = null;
-try {
-  // if running from repo
-  Wit = require('../').Wit;
-  log = require('../').log;
-} catch (e) {
-  Wit = require('node-wit').Wit;
-  log = require('node-wit').log;
-}
-
-const wit = new Wit({
-  accessToken: Config.WIT_TOKEN,
-  actions,
-  logger: new log.Logger(log.INFO)
-});
+const wit = bot.getWit();
 
 // This will contain all user sessions.
 // Each session has an entry:
