@@ -5,7 +5,7 @@ const crypto = require('crypto');
 const express = require('express');
 const fetch = require('node-fetch');
 const request = require('request');
-const Config = requre('./const.js');
+const Config = require('./const.js');
 
 let Wit = null;
 let log = null;
