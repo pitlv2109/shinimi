@@ -5,7 +5,9 @@ const crypto = require('crypto');
 const express = require('express');
 const fetch = require('node-fetch');
 const request = require('request');
+
 const Config = require('./const.js');
+const FB = require('./facebook.js');
 
 let Wit = null;
 let log = null;
@@ -18,31 +20,31 @@ try {
   log = require('node-wit').log;
 }
 
-// ----------------------------------------------------------------------------
-// Messenger API specific code
+// // ----------------------------------------------------------------------------
+// // Messenger API specific code
 
-// See the Send API reference
-// https://developers.facebook.com/docs/messenger-platform/send-api-reference
+// // See the Send API reference
+// // https://developers.facebook.com/docs/messenger-platform/send-api-reference
 
-const fbMessage = (id, text) => {
-  const body = JSON.stringify({
-    recipient: { id },
-    message: { text },
-  });
-  const qs = 'access_token=' + encodeURIComponent(Config.FB_PAGE_TOKEN);
-  return fetch('https://graph.facebook.com/me/messages?' + qs, {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body,
-  })
-  .then(rsp => rsp.json())
-  .then(json => {
-    if (json.error && json.error.message) {
-      throw new Error(json.error.message);
-    }
-    return json;
-  });
-};
+// const fbMessage = (id, text) => {
+//   const body = JSON.stringify({
+//     recipient: { id },
+//     message: { text },
+//   });
+//   const qs = 'access_token=' + encodeURIComponent(Config.FB_PAGE_TOKEN);
+//   return fetch('https://graph.facebook.com/me/messages?' + qs, {
+//     method: 'POST',
+//     headers: {'Content-Type': 'application/json'},
+//     body,
+//   })
+//   .then(rsp => rsp.json())
+//   .then(json => {
+//     if (json.error && json.error.message) {
+//       throw new Error(json.error.message);
+//     }
+//     return json;
+//   });
+// };
 
 // ----------------------------------------------------------------------------
 // Wit.ai bot specific code
@@ -92,7 +94,7 @@ const actions = {
       // Yay, we found our recipient!
       // Let's forward our bot response to her.
       // We return a promise to let our bot know when we're done sending
-      return fbMessage(recipientId, text)
+      return FB.fbMessage(recipientId, text)
       .then(() => null)
       .catch((err) => {
         console.error(
@@ -181,7 +183,7 @@ app.post('/webhook', (req, res) => {
           if (attachments) {
             // We received an attachment
             // Let's reply with an automatic message
-            fbMessage(sender, 'Sorry I can only process text messages for now.')
+            FB.fbMessage(sender, 'Sorry I can only process text messages for now.')
             .catch(console.error);
           } else if (text) {
             // We received a text message
