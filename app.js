@@ -30,9 +30,6 @@ try {
   log = require('node-wit').log;
 }
 
-// Webserver parameter
-const PORT = process.env.PORT || 8445;
-
 // Wit.ai parameters
 const WIT_TOKEN = process.env.WIT_TOKEN;
 
@@ -269,5 +266,9 @@ function verifyRequestSignature(req, res, buf) {
   }
 }
 
-app.listen(PORT);
-console.log('Listening on :' + PORT + '...');
+//Use Heroku port
+app.set('port', (process.env.PORT || 5000));
+
+app.listen(app.get('port'), function() {
+  console.log('Node app is running on port', app.get('port'));
+});
