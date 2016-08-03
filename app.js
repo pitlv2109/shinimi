@@ -152,7 +152,8 @@ app.use(({method, url}, rsp, next) => {
   });
   next();
 });
-app.use(bodyParser.json({ verify: verifyRequestSignature }));
+
+//app.use(bodyParser.json({ verify: verifyRequestSignature }));
 
 app.get('/', function(req, res) {
   res.send("Hello, I'm a chat bot");
@@ -239,27 +240,28 @@ app.post('/webhook', (req, res) => {
  * https://developers.facebook.com/docs/graph-api/webhooks#setup
  *
  */
-function verifyRequestSignature(req, res, buf) {
-  var signature = req.headers["x-hub-signature"];
 
-  if (!signature) {
-    // For testing, let's log an error. In production, you should throw an
-    // error.
-    console.error("Couldn't validate the signature.");
-  } else {
-    var elements = signature.split('=');
-    var method = elements[0];
-    var signatureHash = elements[1];
+// function verifyRequestSignature(req, res, buf) {
+//   var signature = req.headers["x-hub-signature"];
 
-    var expectedHash = crypto.createHmac('sha1', FB_APP_SECRET)
-                        .update(buf)
-                        .digest('hex');
+//   if (!signature) {
+//     // For testing, let's log an error. In production, you should throw an
+//     // error.
+//     console.error("Couldn't validate the signature.");
+//   } else {
+//     var elements = signature.split('=');
+//     var method = elements[0];
+//     var signatureHash = elements[1];
 
-    if (signatureHash != expectedHash) {
-      throw new Error("Couldn't validate the request signature.");
-    }
-  }
-}
+//     var expectedHash = crypto.createHmac('sha1', FB_APP_SECRET)
+//                         .update(buf)
+//                         .digest('hex');
+
+//     if (signatureHash != expectedHash) {
+//       throw new Error("Couldn't validate the request signature.");
+//     }
+//   }
+// }
 
 //Use Heroku port
 app.set('port', (process.env.PORT || 5000));
