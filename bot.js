@@ -76,7 +76,7 @@ const actions = {
 
 const getWit = () => {
   return new Wit({
-  	accessToken: WIT_TOKEN,
+  	accessToken: Config.WIT_TOKEN,
   	actions,
   	logger: new log.Logger(log.INFO)
   });
