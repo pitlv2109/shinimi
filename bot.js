@@ -111,7 +111,7 @@ const actions = {
   tellJokes({context, entities}) {
     return new Promise(function(resolve, reject) {
       // Read greeings.txt, since it's not a big file, we use readFileSync
-      var jokesArr = fs.readFileSync('./text/joke.txt').toString().split('\n');
+      var jokesArr = fs.readFileSync('./text/jokes.txt').toString().split('\n');
       // Randomly choose a greetings
       context.jokes = jokesArr[Math.floor(Math.random()*jokesArr.length)];
       return resolve(context);
