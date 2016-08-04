@@ -80,6 +80,13 @@ const actions = {
     }
   },
   
+  // Greetings
+  tellJokes({context, entities}) {
+    return new Promise(function(resolve, reject) {
+      context.greetings = "Hey there";
+      return resolve(context);
+    });
+  },
 
   // Weather
   getForecast({context, entities}) {
@@ -102,7 +109,7 @@ const actions = {
       context.jokes = "Chuck Norris died 20 years ago, Death just hasn't built up the courage to tell him yet.";
       return resolve(context);
     });
-  }
+  },
 };
 
 const getWit = () => {
