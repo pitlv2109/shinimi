@@ -44,6 +44,8 @@ app.post('/webhook', (req, res) => {
   // https://developers.facebook.com/docs/messenger-platform/webhook-reference
   const data = req.body;
 
+  // Check to see if object is a page
+  // See more about received message format: https://developers.facebook.com/docs/messenger-platform/webhook-reference#subscribe
   if (data.object === 'page') {
     data.entry.forEach(entry => {
       entry.messaging.forEach(event => {

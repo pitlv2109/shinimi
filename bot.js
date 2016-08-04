@@ -79,8 +79,9 @@ const actions = {
       return Promise.resolve()
     }
   },
-  // You should implement your custom actions here
-  // See https://wit.ai/docs/quickstart
+  
+
+  // Weather
   getForecast({context, entities}) {
   return new Promise(function(resolve, reject) {
     var location = firstEntityValue(entities, "location")
@@ -91,9 +92,17 @@ const actions = {
       context.missingLocation = true;
       delete context.forecast;
     }
-    return resolve(context);
-  });
-},
+      return resolve(context);
+    });
+  },
+
+  // Telling Jokes
+  tellJokes({context, entities}) {
+    return new Promise(function(resolve, reject) {
+      context.jokes = "Chuck Norris died 20 years ago, Death just hasn't built up the courage to tell him yet.";
+      return resolve(context);
+    });
+  }
 };
 
 const getWit = () => {
