@@ -81,7 +81,7 @@ const actions = {
   },
   
   // Greetings
-  tellJokes({context, entities}) {
+  greet({context, entities}) {
     return new Promise(function(resolve, reject) {
       context.greetings = "Hey there";
       return resolve(context);
