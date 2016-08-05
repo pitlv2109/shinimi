@@ -5,9 +5,6 @@ const fs = require('fs');
 const Config = require('./const.js');
 const FB = require('./facebook.js');
 
-// Import actions
-const greetings = require('./actions/greet');
-
 let Wit = null;
 let log = null;
 try {
@@ -21,7 +18,6 @@ try {
 
 // ----------------------------------------------------------------------------
 // Wit.ai bot specific code
-
 // This will contain all user sessions.
 // Each session has an entry:
 // sessionId -> {fbid: facebookUserId, context: sessionState}
@@ -86,17 +82,15 @@ const actions = {
   },
   
   // Greetings
-  greetings.greet(context, entities);
-
-  // greet({context, entities}) {
-  //   return new Promise(function(resolve, reject) {
-  //     // Read greeings.txt, since it's not a big file, we use readFileSync
-  //     var greetingsArr = fs.readFileSync('./text/greetings.txt').toString().split('\n');
-  //     // Randomly choose a greetings
-  //     context.greetings = greetingsArr[Math.floor(Math.random()*greetingsArr.length)];
-  //     return resolve(context);
-  //   });
-  // },
+  greet({context, entities}) {
+    return new Promise(function(resolve, reject) {
+      // Read greeings.txt, since it's not a big file, we use readFileSync
+      var greetingsArr = fs.readFileSync('./text/greetings.txt').toString().split('\n');
+      // Randomly choose a greetings
+      context.greetings = greetingsArr[Math.floor(Math.random()*greetingsArr.length)];
+      return resolve(context);
+    });
+  },
 
   // Weather
   getForecast({context, entities}) {
