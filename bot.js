@@ -111,13 +111,14 @@ const actions = {
 
       weather.current(function(err, data) {
       if (!err) {
-        context.forecast = Math.round(data.main.temp) + "°F with " + data.weather[0].description + " in " + location;
-        delete context.missingLocation;
+        context.forecast = Math.round(data.main.temp) + "°F with " 
+        + data.weather[0].description + " in " + location;
       }
       else 
-        console.error(err.message);
+        context.forecast = "Shinimi couldn't do what you just asked. Bad Shinimi :(. Please try again."
       });
-
+      
+      delete context.missingLocation;
     } else {
       context.missingLocation = true;
       delete context.forecast;
