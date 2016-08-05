@@ -1,8 +1,12 @@
 'use strict'
 
+// Import File Stream, TOKENS, and FB code
 const fs = require('fs');
 const Config = require('./const.js');
 const FB = require('./facebook.js');
+
+// Import actions
+const greetings = require('./actions/greet');
 
 let Wit = null;
 let log = null;
@@ -82,15 +86,17 @@ const actions = {
   },
   
   // Greetings
-  greet({context, entities}) {
-    return new Promise(function(resolve, reject) {
-      // Read greeings.txt, since it's not a big file, we use readFileSync
-      var greetingsArr = fs.readFileSync('./text/greetings.txt').toString().split('\n');
-      // Randomly choose a greetings
-      context.greetings = greetingsArr[Math.floor(Math.random()*greetingsArr.length)];
-      return resolve(context);
-    });
-  },
+  greetings.greet(context, entities);
+
+  // greet({context, entities}) {
+  //   return new Promise(function(resolve, reject) {
+  //     // Read greeings.txt, since it's not a big file, we use readFileSync
+  //     var greetingsArr = fs.readFileSync('./text/greetings.txt').toString().split('\n');
+  //     // Randomly choose a greetings
+  //     context.greetings = greetingsArr[Math.floor(Math.random()*greetingsArr.length)];
+  //     return resolve(context);
+  //   });
+  // },
 
   // Weather
   getForecast({context, entities}) {
