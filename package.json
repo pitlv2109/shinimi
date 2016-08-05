@@ -25,6 +25,7 @@
     "node-fetch": "^1.6.0",
     "node-uuid": "^1.4.7",
     "node-wit": "^4.0.0",
+    "openweathermap-js": "^1.0.1",
     "request": "^2.74.0"
   },
   "engines": {

@@ -1,9 +1,12 @@
 'use strict'
 
-// Import File Stream, TOKENS, and FB code
-const fs = require('fs');
+// Import TOKENS, and FB code
 const Config = require('./const.js');
 const FB = require('./facebook.js');
+
+// APIs for actions
+const weather = require('openweathermap-js'); // to get current weather
+const fs = require('fs'); // read/write files
 
 let Wit = null;
 let log = null;
@@ -95,10 +98,26 @@ const actions = {
   // Weather
   getForecast({context, entities}) {
   return new Promise(function(resolve, reject) {
-    var location = firstEntityValue(entities, "location")
+    var location = firstEntityValue(entities, 'location')
     if (location) {
-      context.forecast = 'sunny in ' + location; // we should call a weather API here
-      delete context.missingLocation;
+      weather.defaults({
+          appid: Config.OPENWEATHERMAP_API_KEY,
+          location: location,
+          method: 'name',
+          format: 'JSON',
+          accuracy: 'accurate',
+          units: 'imperial'
+      });
+
+      weather.current(function(err, data) {
+      if (!err) {
+        context.forecast = data.main.temp + "F and " + 
+        data.weather[0].description + " in " + location;
+        delete context.missingLocation;
+      }
+      else 
+        console.error(err.message);
+    });
     } else {
       context.missingLocation = true;
       delete context.forecast;
