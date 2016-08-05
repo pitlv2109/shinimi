@@ -111,7 +111,7 @@ const actions = {
 
       weather.current(function(err, data) {
       if (!err) {
-        context.forecast = data.main.temp + "F and " + 
+        context.forecast = Math.round(data.main.temp) + "°F and " + 
         data.weather[0].description + " in " + location;
         delete context.missingLocation;
       }
