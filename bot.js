@@ -98,33 +98,38 @@ const actions = {
   // Weather
   getForecast({context, entities}) {
   return new Promise(function(resolve, reject) {
+    var isWeatherCallBackDone = true;
     var location = firstEntityValue(entities, 'location')
     if (location) {
-        delete context.missingLocation;
-        weather.defaults({
-            appid: Config.OPENWEATHERMAP_API_KEY,
-            loc: location,
-            method: 'name',
-            format: 'JSON',
-            accuracy: 'accurate',
-            units: 'imperial'
-        });
+      delete context.missingLocation;
+      isWeatherCallBackDone = false;
+      weather.defaults({
+          appid: Config.OPENWEATHERMAP_API_KEY,
+          loc: location,
+          method: 'name',
+          format: 'JSON',
+          accuracy: 'accurate',
+          units: 'imperial'
+      });
 
-        weather.current(function(err, data) {
-        if (!err) {
-          context.forecast = Math.round(data.main.temp) + "°F with " 
-          + data.weather[0].description + " in " + location;
-        }
-        else {
-          context.forecast = "Mission unaccomplished. Bad Shinimi :(. Please try again."
-        }
-        return resolve(context);
-        });
-      } else {
+      weather.current(function(err, data) {
+      if (!err) {
+        context.forecast = Math.round(data.main.temp) + "°F with " 
+        + data.weather[0].description + " in " + location;
+        isWeatherCallBackDone = true;
+      }
+      else {
+        context.forecast = "Mission unaccomplished. Bad Shinimi :(. Please try again."
+        isWeatherCallBackDone = true;
+      }
+      });
+    } else {
+      if (isWeatherCallBackDone) {
         context.missingLocation = true;
         delete context.forecast;
-        return resolve(context);
       }
+    }
+      return resolve(context);
     });
   },
 
