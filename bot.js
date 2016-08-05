@@ -98,12 +98,12 @@ const actions = {
   // Weather
   getForecast({context, entities}) {
   return new Promise(function(resolve, reject) {
-    var location = firstEntityValue(entities, 'location')
-    if (location) {
-      context.missingLocation = false;
+    var loc = firstEntityValue(entities, 'location')
+    if (loc) {
+      delete context.missingLocation;
       weather.defaults({
           appid: Config.OPENWEATHERMAP_API_KEY,
-          loc: location,
+          location: location,
           method: 'name',
           format: 'JSON',
           accuracy: 'accurate',
@@ -113,7 +113,8 @@ const actions = {
       weather.current(function(err, data) {
       if (!err) {
         context.forecast = Math.round(data.main.temp) + "°F with " 
-        + data.weather[0].description + " in " + location;
+        + data.weather[0].description + " in " + loc;
+        return resolve(context);
       }
       else 
         context.forecast = "Mission unaccomplished. Bad Shinimi :(. Please try again."
@@ -121,8 +122,8 @@ const actions = {
     } else {
       context.missingLocation = true;
       delete context.forecast;
-    }
       return resolve(context);
+    }
     });
   },
 
