@@ -98,10 +98,9 @@ const actions = {
   // Weather
   getForecast({context, entities}) {
   return new Promise(function(resolve, reject) {
-    var isForecastReady;
     var location = firstEntityValue(entities, 'location')
     if (location) {
-      delete context.missingLocation;
+      context.missingLocation = false;
       weather.defaults({
           appid: Config.OPENWEATHERMAP_API_KEY,
           loc: location,
@@ -115,17 +114,15 @@ const actions = {
       if (!err) {
         context.forecast = Math.round(data.main.temp) + "°F with " 
         + data.weather[0].description + " in " + location;
-        return resolve(context);
       }
       else 
         context.forecast = "Mission unaccomplished. Bad Shinimi :(. Please try again."
       });
-
     } else {
-        context.missingLocation = true;
-        delete context.forecast;
-        return resolve(context);
-      }
+      context.missingLocation = true;
+      delete context.forecast;
+    }
+      return resolve(context);
     });
   },
 
