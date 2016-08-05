@@ -100,29 +100,31 @@ const actions = {
   return new Promise(function(resolve, reject) {
     var location = firstEntityValue(entities, 'location')
     if (location) {
-      delete context.missingLocation;
-      weather.defaults({
-          appid: Config.OPENWEATHERMAP_API_KEY,
-          loc: location,
-          method: 'name',
-          format: 'JSON',
-          accuracy: 'accurate',
-          units: 'imperial'
-      });
+        delete context.missingLocation;
+        weather.defaults({
+            appid: Config.OPENWEATHERMAP_API_KEY,
+            loc: location,
+            method: 'name',
+            format: 'JSON',
+            accuracy: 'accurate',
+            units: 'imperial'
+        });
 
-      weather.current(function(err, data) {
-      if (!err) {
-        context.forecast = Math.round(data.main.temp) + "°F with " 
-        + data.weather[0].description + " in " + location;
+        weather.current(function(err, data) {
+        if (!err) {
+          context.forecast = Math.round(data.main.temp) + "°F with " 
+          + data.weather[0].description + " in " + location;
+        }
+        else {
+          context.forecast = "Mission unaccomplished. Bad Shinimi :(. Please try again."
+        }
+        return resolve(context);
+        });
+      } else {
+        context.missingLocation = true;
+        delete context.forecast;
+        return resolve(context);
       }
-      else 
-        context.forecast = "Mission unaccomplished. Bad Shinimi :(. Please try again."
-      });
-    } else {
-      context.missingLocation = true;
-      delete context.forecast;
-    }
-      return resolve(context);
     });
   },
 
