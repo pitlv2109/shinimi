@@ -103,7 +103,7 @@ const actions = {
       delete context.missingLocation;
       weather.defaults({
           appid: Config.OPENWEATHERMAP_API_KEY,
-          location: location,
+          location: loc,
           method: 'name',
           format: 'JSON',
           accuracy: 'accurate',
