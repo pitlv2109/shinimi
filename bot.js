@@ -102,7 +102,7 @@ const actions = {
     if (location) {
       weather.defaults({
           appid: Config.OPENWEATHERMAP_API_KEY,
-          location: location,
+          loc: location,
           method: 'name',
           format: 'JSON',
           accuracy: 'accurate',
@@ -111,13 +111,13 @@ const actions = {
 
       weather.current(function(err, data) {
       if (!err) {
-        context.forecast = Math.round(data.main.temp) + "°F and " + 
-        data.weather[0].description + " in " + location;
+        context.forecast = Math.round(data.main.temp) + "°F with " + data.weather[0].description + " in " + location;
         delete context.missingLocation;
       }
       else 
         console.error(err.message);
-    });
+      });
+
     } else {
       context.missingLocation = true;
       delete context.forecast;
