@@ -7,6 +7,7 @@ const FB = require('./facebook.js');
 // APIs for actions
 const weather = require('openweathermap-js'); // to get current weather
 const fs = require('fs'); // read/write files
+const momentTime = require('moment-timezone');  // to get time at different cities
 
 let Wit = null;
 let log = null;
@@ -134,6 +135,21 @@ const actions = {
       var jokesArr = fs.readFileSync('./text/jokes.txt').toString().split('\n');
       // Randomly choose a greetings
       context.jokes = jokesArr[Math.floor(Math.random()*jokesArr.length)];
+      return resolve(context);
+    });
+  },
+
+  // Get Current Time
+  getCurrentTime({context, entities}) {
+    return new Promise(function(resolve, reject) {
+      var loc = firstEntityValue(entities, 'location')
+      if (loc) {
+        delete context.missingTimeZone;
+        var date = new Date(); // get current time
+        context.currentTime = momentTime(date).tz(loc).format('h:m A');  // convert it to requested location's time
+      } else {
+        context.missingTimeZone = true;
+      }
       return resolve(context);
     });
   },
