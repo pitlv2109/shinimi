@@ -152,7 +152,6 @@ const actions = {
           context.currentTime = timeObject.format('h:mm A (Z)');
           delete context.missingTimeZone;
         } else {
-          console.log("LOCATION INCORRECT: " + loc);
           context.missingTimeZone = true;
           delete context.currentTime;
         }
