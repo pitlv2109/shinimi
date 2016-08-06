@@ -149,11 +149,12 @@ const actions = {
 
         // Check to see if location is valid
         if (timeObject._isUTC) {
-          context.currentTime = timeObject.format('h:m A (Z)');
+          context.currentTime = timeObject.format('h:mm A (Z)');
           delete context.missingTimeZone;
         } else {
           console.log("LOCATION INCORRECT: " + loc);
           context.missingTimeZone = true;
+          delete context.currentTime;
         }
       } else {
         context.missingTimeZone = true;
