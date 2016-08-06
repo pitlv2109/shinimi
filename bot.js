@@ -144,9 +144,16 @@ const actions = {
     return new Promise(function(resolve, reject) {
       var loc = firstEntityValue(entities, 'location')
       if (loc) {
-        delete context.missingTimeZone;
-        var date = new Date(); // get current time
-        context.currentTime = momentTime(date).tz(loc).format('h:m A');  // convert it to requested location's time
+        var date = new Date();
+        var timeObject = momentTime(date).tz(loc);
+
+        // Check to see if location is valid
+        if (timeObject._isUTC) {
+          context.currentTime = timeObject.format('h:m A (Z)');
+          delete context.missingTimeZone;
+        } else {
+          context.missingTimeZone = true;
+        }
       } else {
         context.missingTimeZone = true;
       }
