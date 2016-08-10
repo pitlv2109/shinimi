@@ -138,29 +138,6 @@ const actions = {
       return resolve(context);
     });
   },
-
-  // Get Current Time
-  getCurrentTime({context, entities}) {
-    return new Promise(function(resolve, reject) {
-      var loc = firstEntityValue(entities, 'location')
-      if (loc) {
-        var date = new Date();
-        var timeObject = momentTime(date).tz(loc);
-
-        // Check to see if location is valid
-        if (timeObject._isUTC) {
-          context.currentTime = timeObject.format('h:mm A (Z)');
-          delete context.missingTimeZone;
-        } else {
-          context.missingTimeZone = true;
-          delete context.currentTime;
-        }
-      } else {
-        context.missingTimeZone = true;
-      }
-      return resolve(context);
-    });
-  },
 };
 
 const getWit = () => {
