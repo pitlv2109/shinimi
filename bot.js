@@ -8,6 +8,10 @@ const FB = require('./facebook.js');
 const weather = require('openweathermap-js'); // to get current weather
 const fs = require('fs'); // read/write files
 const momentTime = require('moment-timezone');  // to get time at different cities
+var bingTranslator = require('./node_modules/bing-translate/lib/bing-translate.js').init({
+    client_id: Config.TRANS_CLIENT_ID, 
+    client_secret: Config.TRANS_CLIENT_SECRET
+  });
 
 let Wit = null;
 let log = null;
@@ -142,8 +146,18 @@ const actions = {
   // Translate
   translate({context, entities}) {
     return new Promise(function(resolve, reject) {
-      context.newVersion = "Hello World";
-      return resolve(context);
+      var originalText = firstEntityValue(entities, 'phrase_to_translate');
+      if (originalText) {
+      	bingTranslator.translate(originalText, 'en', 'es', function(err, res) {
+      		if (!err) {
+      			context.newVersion = res.translated_text;
+      			return resolve(context);
+      		} 
+      	});
+      } else {
+      	context.newVersion = "Something's wrong!";
+      	return resolve(context);
+      }
     });
   },
 };
