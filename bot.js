@@ -145,24 +145,36 @@ const actions = {
 
   // Translate
   translate({context, entities}) {
-    return new Promise(function(resolve, reject) {
-      var originalText = firstEntityValue(entities, 'phrase_to_translate');
-      var language = firstEntityValue(entities, 'language');
+  	return new Promise(function(resolve, reject) {
+  		// Get entities from wit.ai
+    	var originalText = firstEntityValue(entities, 'phrase_to_translate');
+    	var language = firstEntityValue(entities, 'language');
 
-      console.log ("Your requested language is " + language);
-      if (originalText) {
-      	bingTranslator.translate(originalText, 'en', 'es', function(err, res) {
-      		if (!err) {
-      			context.newVersion = res.translated_text;
-      			return resolve(context);
-      		} 
-      	});
-      } else {
-      	context.newVersion = "Something's wrong!";
-      	return resolve(context);
-      }
-    });
-  },
+      	// Read translator.txt, since it's not a big file, we use readFileSync
+      	var languageCodeArr = fs.readFileSync('./text/translator.txt').toString().split('\n');
+
+      	// Find the language and its code
+      	var languageIndex = -1;
+      	for (var i = 0; i < languageCodeArr.length; i++) {
+      		if (languageCodeArr[i].toLowerCase() === language.toLowerCase()) {
+      			languageIndex = i - 1;
+      			break;
+      		}
+      	}
+
+      	if (originalText && languageIndex >= 0) {
+      		bingTranslator.translate(originalText, 'en', languageCodeArr[languageIndex], function(err, res) {
+      			if (!err) {
+      				context.newVersion = res.translated_text;
+      				return resolve(context);
+      			} 
+	      	});
+	      } else {
+	      	context.newVersion = "Something's wrong!";
+	      	return resolve(context);
+	      }
+	    });
+  	},
 };
 
 const getWit = () => {
