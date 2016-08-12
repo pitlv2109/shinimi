@@ -147,6 +147,9 @@ const actions = {
   translate({context, entities}) {
     return new Promise(function(resolve, reject) {
       var originalText = firstEntityValue(entities, 'phrase_to_translate');
+      var language = firstEntityValue(entities, 'language');
+
+      console.log ("Your requested language is " + language);
       if (originalText) {
       	bingTranslator.translate(originalText, 'en', 'es', function(err, res) {
       		if (!err) {
